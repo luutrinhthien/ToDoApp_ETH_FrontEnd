@@ -1,9 +1,23 @@
 import { Web3Button } from '@web3modal/react'
 import { Flex, Button, Box, useColorMode } from '@chakra-ui/react'
 import { Web3Modal } from '@web3modal/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-function connectWallet({ setSigner }) {
+function Wallet({ setSigner }) {
+
+    useEffect(() => {
+        const handleAccountsChanged = (accounts) => {
+            console.log('Connected accounts: ', accounts);
+            location.reload()
+        };
+
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        };
+    }, []);
 
     const connectMetaMask = async () => {
         const { ethereum } = window
@@ -14,7 +28,9 @@ function connectWallet({ setSigner }) {
         } else {
             const accounts = ethereum.request({ method: 'eth_requestAccounts' })
             // ethereum.request({ method: 'wallet_switchEthereumChain' })
+
             setSigner(accounts[0])
+            // location.reload()
         }
     }
 
@@ -23,4 +39,4 @@ function connectWallet({ setSigner }) {
     )
 }
 
-export default connectWallet
+export default Wallet

@@ -6,7 +6,7 @@ import ToDoList from './Connect'
 import ConnectWallet from './connectWallet'
 import { sign } from 'crypto';
 
-export default function index() {
+export default function Index() {
 
     useEffect(() => {
         checkUser()
@@ -15,6 +15,11 @@ export default function index() {
     const checkUser = async () => {
         const { ethereum } = window
         const accounts = await ethereum.request({ method: 'eth_accounts' })
+        const chainid = await ethereum.request({ method: 'eth_chainId' })
+        console.log(chainid);
+        if (chainid != '0xaa36a7') {
+            alert('Please change to Sepolia network')
+        }
         setSigner(accounts[0])
     }
 
