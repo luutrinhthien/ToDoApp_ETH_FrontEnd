@@ -14,13 +14,15 @@ export default function Index() {
 
     const checkUser = async () => {
         const { ethereum } = window
-        const accounts = await ethereum.request({ method: 'eth_accounts' })
-        const chainid = await ethereum.request({ method: 'eth_chainId' })
-        console.log(chainid);
-        if (chainid != '0xaa36a7') {
-            alert('Please change to Sepolia network')
+        if (ethereum) {
+            const accounts = await ethereum.request({ method: 'eth_accounts' })
+            const chainid = await ethereum.request({ method: 'eth_chainId' })
+            console.log(chainid);
+            if (chainid != '0xaa36a7') {
+                alert('Please change to Sepolia network')
+            }
+            setSigner(accounts[0])
         }
-        setSigner(accounts[0])
     }
 
     const [signer, setSigner] = useState()

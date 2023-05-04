@@ -6,17 +6,19 @@ import { useState, useEffect } from 'react'
 function Wallet({ setSigner }) {
 
     useEffect(() => {
-        const handleAccountsChanged = (accounts) => {
-            console.log('Connected accounts: ', accounts);
-            location.reload()
-        };
+        if (window.ethereum) {
+            const handleAccountsChanged = (accounts) => {
+                console.log('Connected accounts: ', accounts);
+                location.reload()
+            };
 
-        window.ethereum.on('accountsChanged', handleAccountsChanged);
+            window.ethereum.on('accountsChanged', handleAccountsChanged);
 
-        // Clean up the event listener when the component unmounts
-        return () => {
-            window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        };
+            // Clean up the event listener when the component unmounts
+            return () => {
+                window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+            };
+        }
     }, []);
 
     const connectMetaMask = async () => {
